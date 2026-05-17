@@ -311,7 +311,7 @@
 
     .save-contact-wrap {
       width: var(--mobile-content-width);
-      max-width: 320px;
+      max-width: 340px;
       margin-top: 24px;
       position: relative;
       z-index: 3;
@@ -358,11 +358,11 @@
       justify-self: center;
     }
 
-    .contact-qr-panel {
+    .contact-save-panel {
       display: none;
       margin-top: 18px;
       width: 100%;
-      max-width: 300px;
+      max-width: 320px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -375,11 +375,71 @@
       z-index: 5;
     }
 
-    .contact-qr-panel.is-visible {
+    .contact-save-panel.is-visible {
       display: flex;
     }
 
-    .contact-qr-title {
+    .contact-save-title {
+      margin: 0 0 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .mobile-save-options {
+      width: 100%;
+      display: grid;
+      gap: 10px;
+    }
+
+    .option-button {
+      width: 100%;
+      min-height: 42px;
+      border-radius: 999px;
+      border: 1.5px solid var(--accent);
+      background: #ffffff;
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .option-button:hover {
+      transform: translateY(-1px);
+      background: rgba(201, 111, 73, 0.08);
+    }
+
+    .option-button.is-active {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .option-button.is-disabled {
+      opacity: 0.58;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .contact-qr-panel,
+    .download-panel {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .contact-qr-panel.is-visible,
+    .download-panel.is-visible {
+      display: flex;
+    }
+
+    .contact-qr-title,
+    .download-title {
       margin: 0 0 10px;
       font-size: 13.5px;
       line-height: 1.4;
@@ -397,13 +457,18 @@
       background: #ffffff;
     }
 
-    .contact-qr-note {
+    .contact-qr-note,
+    .download-note {
       margin: 12px 0 0;
       font-size: 12.5px;
       line-height: 1.45;
       color: var(--accent);
-      max-width: 260px;
+      max-width: 270px;
       background: #ffffff;
+    }
+
+    .desktop-only-text {
+      display: none;
     }
 
     @media (min-width: 768px) {
@@ -512,13 +577,27 @@
       }
 
       .save-contact-wrap {
-        width: 320px;
+        width: 340px;
         margin-top: 30px;
       }
 
-      .contact-qr-panel {
-        max-width: 320px;
+      .contact-save-panel {
+        max-width: 340px;
         padding: 18px 18px 20px;
+      }
+
+      .mobile-save-options,
+      .download-panel {
+        display: none !important;
+      }
+
+      .desktop-only-text {
+        display: block;
+      }
+
+      .contact-qr-panel {
+        display: flex;
+        margin-top: 0;
       }
 
       .contact-qr {
@@ -595,7 +674,8 @@
         width: 180px;
       }
 
-      .contact-qr-note {
+      .contact-qr-note,
+      .download-note {
         font-size: 12px;
       }
     }
@@ -674,12 +754,29 @@
         <i></i>
       </button>
 
-      <div class="contact-qr-panel" aria-label="Contact QR code">
-        <p class="contact-qr-title">Scan to add contact</p>
-        <img class="contact-qr" src="contact-qr.png" alt="QR code to add Ilan Ronen as a contact" />
-        <p class="contact-qr-note">
-          On desktop, scan with your phone. On mobile, use this QR as backup if the native contact screen does not open.
-        </p>
+      <div class="contact-save-panel" aria-label="Save contact options">
+        <p class="contact-save-title">Choose how to save contact</p>
+
+        <div class="mobile-save-options">
+          <button class="option-button qr-option-button" type="button">QR Code</button>
+          <button class="option-button download-option-button" type="button">Download Contact</button>
+        </div>
+
+        <div class="contact-qr-panel" aria-label="Contact QR code">
+          <p class="contact-qr-title">Scan to add contact</p>
+          <img class="contact-qr" src="contact-qr.png" alt="QR code to add Ilan Ronen as a contact" />
+          <p class="contact-qr-note">
+            <span class="desktop-only-text">Scan this QR with your phone to add the contact.</span>
+            <span class="mobile-only-text">Use this QR option if you prefer saving through your phone’s QR/contact scanner.</span>
+          </p>
+        </div>
+
+        <div class="download-panel" aria-label="Download contact file">
+          <p class="download-title">Contact file downloaded</p>
+          <p class="download-note">
+            Open the downloaded <strong>ilan-ronen.vcf</strong> file to import the contact into your phone.
+          </p>
+        </div>
       </div>
     </div>
   </main>
@@ -695,20 +792,16 @@
 
     const saveContactButton = document.querySelector('.save-contact-button');
     const saveContactLabel = document.querySelector('.save-contact-label');
+    const contactSavePanel = document.querySelector('.contact-save-panel');
+
+    const qrOptionButton = document.querySelector('.qr-option-button');
+    const downloadOptionButton = document.querySelector('.download-option-button');
     const contactQrPanel = document.querySelector('.contact-qr-panel');
+    const downloadPanel = document.querySelector('.download-panel');
 
     const linkedinLink = document.querySelector('.linkedin-link');
 
-    const androidContactIntent =
-      'intent://contacts/people/#Intent;' +
-      'action=android.intent.action.INSERT;' +
-      'type=vnd.android.cursor.dir/contact;' +
-      'S.name=Ilan%20Ronen;' +
-      'S.phone=%2B972586045183;' +
-      'S.email=ilan%40horizonsmartsolutions.com;' +
-      'S.company=Horizon%20Smart%20Solutions%20Ltd.;' +
-      'S.job_title=CEO%20%26%20Founder;' +
-      'end';
+    const downloadSessionKey = 'ilanRonenContactDownloaded';
 
     function copyToClipboard(value) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -741,26 +834,84 @@
       feedbackElement.classList.add('is-visible');
     }
 
-    function showContactQr() {
-      contactQrPanel.classList.add('is-visible');
-      saveContactLabel.textContent = 'Hide Contact QR';
+    function isDesktopView() {
+      return window.matchMedia('(min-width: 768px)').matches;
     }
 
-    function hideContactQr() {
-      contactQrPanel.classList.remove('is-visible');
-      saveContactLabel.textContent = 'Save Contact';
-    }
+    function openSavePanel() {
+      contactSavePanel.classList.add('is-visible');
+      saveContactLabel.textContent = 'Hide Contact Options';
 
-    function toggleContactQr() {
-      if (contactQrPanel.classList.contains('is-visible')) {
-        hideContactQr();
-      } else {
-        showContactQr();
+      if (isDesktopView()) {
+        showQrOnly();
       }
     }
 
+    function closeSavePanel() {
+      contactSavePanel.classList.remove('is-visible');
+      saveContactLabel.textContent = 'Save Contact';
+      hideSaveSubPanels();
+      setOptionActive(null);
+    }
+
+    function hideSaveSubPanels() {
+      contactQrPanel.classList.remove('is-visible');
+      downloadPanel.classList.remove('is-visible');
+    }
+
+    function setOptionActive(activeButton) {
+      qrOptionButton.classList.remove('is-active');
+      downloadOptionButton.classList.remove('is-active');
+
+      if (activeButton) {
+        activeButton.classList.add('is-active');
+      }
+    }
+
+    function showQrOnly() {
+      hideSaveSubPanels();
+      contactQrPanel.classList.add('is-visible');
+      setOptionActive(qrOptionButton);
+    }
+
+    function showDownloadOnly() {
+      hideSaveSubPanels();
+      downloadPanel.classList.add('is-visible');
+      setOptionActive(downloadOptionButton);
+    }
+
+    function updateDownloadState() {
+      if (sessionStorage.getItem(downloadSessionKey) === 'true') {
+        downloadOptionButton.textContent = 'Contact Downloaded';
+        downloadOptionButton.classList.add('is-disabled');
+      }
+    }
+
+    function triggerContactDownloadOnce() {
+      const alreadyDownloaded = sessionStorage.getItem(downloadSessionKey) === 'true';
+
+      if (alreadyDownloaded) {
+        showDownloadOnly();
+        return;
+      }
+
+      const downloadLink = document.createElement('a');
+      downloadLink.href = 'ilan-ronen.vcf';
+      downloadLink.download = 'ilan-ronen.vcf';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
+
+      sessionStorage.setItem(downloadSessionKey, 'true');
+
+      downloadOptionButton.textContent = 'Contact Downloaded';
+      downloadOptionButton.classList.add('is-disabled');
+
+      showDownloadOnly();
+    }
+
     phoneButton.addEventListener('click', function (event) {
-      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const isDesktop = isDesktopView();
 
       if (isDesktop) {
         event.preventDefault();
@@ -781,7 +932,7 @@
     });
 
     emailButton.addEventListener('click', function (event) {
-      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const isDesktop = isDesktopView();
 
       if (isDesktop) {
         event.preventDefault();
@@ -801,35 +952,35 @@
     });
 
     saveContactButton.addEventListener('click', function () {
-      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-      const isAndroid = /Android/i.test(navigator.userAgent);
+      if (contactSavePanel.classList.contains('is-visible')) {
+        closeSavePanel();
+      } else {
+        openSavePanel();
+      }
+    });
 
-      if (isDesktop) {
-        toggleContactQr();
+    qrOptionButton.addEventListener('click', function () {
+      showQrOnly();
+    });
+
+    downloadOptionButton.addEventListener('click', function () {
+      if (isDesktopView()) {
         return;
       }
 
-      if (isAndroid) {
-        window.location.href = androidContactIntent;
-
-        setTimeout(function () {
-          showContactQr();
-        }, 1200);
-
-        return;
-      }
-
-      toggleContactQr();
+      triggerContactDownloadOnce();
     });
 
     linkedinLink.addEventListener('click', function (event) {
-      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const isDesktop = isDesktopView();
 
       if (isDesktop) {
         event.preventDefault();
         window.open(linkedinLink.href, '_blank', 'noopener');
       }
     });
+
+    updateDownloadState();
   </script>
 </body>
 </html>
