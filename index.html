@@ -412,6 +412,7 @@
       font-weight: 700;
       cursor: pointer;
       transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+      padding: 0 14px;
     }
 
     .option-button:hover {
@@ -428,6 +429,39 @@
       opacity: 0.58;
       cursor: default;
       pointer-events: none;
+    }
+
+    .download-option-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .recommended-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 20px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(201, 111, 73, 0.12);
+      color: var(--accent);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0.25px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .download-option-button.is-active .recommended-badge {
+      background: rgba(255,255,255,0.22);
+      color: #ffffff;
+    }
+
+    .download-option-button.is-disabled .recommended-badge {
+      display: none;
     }
 
     .contact-qr-panel,
@@ -806,7 +840,11 @@
 
         <div class="mobile-save-options">
           <button class="option-button qr-option-button" type="button">QR Code</button>
-          <button class="option-button download-option-button" type="button">Download Contact</button>
+
+          <button class="option-button download-option-button" type="button">
+            <span class="download-button-label">Download Contact</span>
+            <span class="recommended-badge">Recommended</span>
+          </button>
         </div>
 
         <div class="contact-qr-panel" aria-label="Contact QR code">
@@ -855,12 +893,13 @@
 
     const qrOptionButton = document.querySelector('.qr-option-button');
     const downloadOptionButton = document.querySelector('.download-option-button');
+    const downloadButtonLabel = document.querySelector('.download-button-label');
     const contactQrPanel = document.querySelector('.contact-qr-panel');
     const downloadPanel = document.querySelector('.download-panel');
 
     const linkedinLink = document.querySelector('.linkedin-link');
 
-    const downloadSessionKey = 'ilanRonenContactDownloaded';
+    let contactDownloadedDuringCurrentOpen = false;
 
     function copyToClipboard(value) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -911,6 +950,7 @@
       saveContactLabel.textContent = 'Save Contact';
       hideSaveSubPanels();
       setOptionActive(null);
+      resetDownloadAvailability();
     }
 
     function hideSaveSubPanels() {
@@ -939,17 +979,20 @@
       setOptionActive(downloadOptionButton);
     }
 
-    function updateDownloadState() {
-      if (sessionStorage.getItem(downloadSessionKey) === 'true') {
-        downloadOptionButton.textContent = 'Contact Downloaded';
-        downloadOptionButton.classList.add('is-disabled');
-      }
+    function disableDownloadUntilPanelCloses() {
+      contactDownloadedDuringCurrentOpen = true;
+      downloadButtonLabel.textContent = 'Contact Downloaded';
+      downloadOptionButton.classList.add('is-disabled');
+    }
+
+    function resetDownloadAvailability() {
+      contactDownloadedDuringCurrentOpen = false;
+      downloadButtonLabel.textContent = 'Download Contact';
+      downloadOptionButton.classList.remove('is-disabled');
     }
 
     function triggerContactDownloadOnce() {
-      const alreadyDownloaded = sessionStorage.getItem(downloadSessionKey) === 'true';
-
-      if (alreadyDownloaded) {
+      if (contactDownloadedDuringCurrentOpen) {
         showDownloadOnly();
         return;
       }
@@ -961,11 +1004,7 @@
       downloadLink.click();
       downloadLink.remove();
 
-      sessionStorage.setItem(downloadSessionKey, 'true');
-
-      downloadOptionButton.textContent = 'Contact Downloaded';
-      downloadOptionButton.classList.add('is-disabled');
-
+      disableDownloadUntilPanelCloses();
       showDownloadOnly();
     }
 
@@ -1038,8 +1077,6 @@
         window.open(linkedinLink.href, '_blank', 'noopener');
       }
     });
-
-    updateDownloadState();
   </script>
 </body>
 </html>
