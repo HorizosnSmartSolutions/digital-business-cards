@@ -386,6 +386,14 @@
       font-weight: 800;
     }
 
+    .desktop-save-title {
+      display: none;
+    }
+
+    .mobile-save-title {
+      display: inline;
+    }
+
     .mobile-save-options {
       width: 100%;
       display: grid;
@@ -603,6 +611,14 @@
         display: none !important;
       }
 
+      .desktop-save-title {
+        display: inline;
+      }
+
+      .mobile-save-title {
+        display: none;
+      }
+
       .desktop-only-text {
         display: block;
       }
@@ -771,7 +787,10 @@
       </button>
 
       <div class="contact-save-panel" aria-label="Save contact options">
-        <p class="contact-save-title">Choose how to save contact</p>
+        <p class="contact-save-title">
+          <span class="mobile-save-title">Choose how to save contact</span>
+          <span class="desktop-save-title">Scan to save contact</span>
+        </p>
 
         <div class="mobile-save-options">
           <button class="option-button qr-option-button" type="button">QR Code</button>
@@ -783,7 +802,7 @@
           <img class="contact-qr" src="contact-qr.png" alt="QR code to add Ilan Ronen as a contact" />
           <p class="contact-qr-note">
             <span class="desktop-only-text">Scan this QR with your phone to add the contact.</span>
-            <span class="mobile-only-text">Use this QR option if you prefer saving through your phone’s QR/contact scanner.</span>
+            <span class="mobile-only-text">Screenshot the QR, open it in your Gallery, then use Google Lens. If available, choose “Add to contact.” You can also long-press the QR and search it with Google Lens.</span>
           </p>
         </div>
 
