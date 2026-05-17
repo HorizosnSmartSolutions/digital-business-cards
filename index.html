@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ilan Ronen | Digital Business Card</title>
+
+  <style>
+    :root {
+      /* ===== GLOBAL DESIGN SETTINGS ===== */
+      --accent: #c96f49;
+      --accent-dark: #b85f3f;
+      --text: #c96f49;
+      --bg: #ffffff;
+      --button-text: #ffffff;
+      --line: #c96f49;
+      --font-main: "Inter", "Segoe UI", Arial, sans-serif;
+
+      /* ===== LAYOUT SETTINGS ===== */
+      --content-width: 640px;
+      --mobile-content-width: 88vw;
+      --top-spacing-mobile: 72px;
+      --top-spacing-desktop: 92px;
+      --button-radius: 999px;
+      --button-height: 44px;
+      --desktop-button-height: 48px;
+
+      /* ===== IMAGE SIZE SETTINGS ===== */
+      --profile-size-mobile: 82px;
+      --profile-size-desktop: 96px;
+      --logo-size-mobile: 220px;
+      --logo-size-desktop: 300px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: var(--font-main);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
+      padding: var(--top-spacing-mobile) 0 28px;
+      text-align: center;
+    }
+
+    /* ===== DECORATIVE CORNER LINES ===== */
+    .corner-lines {
+      position: fixed;
+      width: 180px;
+      height: 180px;
+      pointer-events: none;
+      opacity: 1;
+      z-index: 0;
+    }
+
+    .corner-lines::before,
+    .corner-lines::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 3px solid var(--line);
+      border-radius: 50%;
+    }
+
+    .corner-lines::after {
+      inset: 14px;
+    }
+
+    .corner-lines span,
+    .corner-lines span::before,
+    .corner-lines span::after {
+      position: absolute;
+      content: "";
+      border: 3px solid var(--line);
+      border-radius: 50%;
+    }
+
+    .corner-lines span {
+      inset: 28px;
+    }
+
+    .corner-lines span::before {
+      inset: 14px;
+    }
+
+    .corner-lines span::after {
+      inset: 28px;
+    }
+
+    .corner-top-right {
+      top: -72px;
+      right: -72px;
+    }
+
+    .corner-bottom-left {
+      bottom: -78px;
+      left: -78px;
+    }
+
+    .card {
+      width: var(--mobile-content-width);
+      max-width: var(--content-width);
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0 auto;
+    }
+
+    /* ===== PROFILE SECTION ===== */
+    .profile {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .profile-photo {
+      width: var(--profile-size-mobile);
+      height: var(--profile-size-mobile);
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto 18px;
+    }
+
+    .name {
+      font-size: 24px;
+      line-height: 1.1;
+      margin: 0 0 8px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-align: center;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 400;
+      letter-spacing: 0.4px;
+      text-align: center;
+    }
+
+    /* ===== BUTTON SECTION ===== */
+    .links {
+      width: 100%;
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .main-button {
+      width: 100%;
+      min-height: var(--button-height);
+      border-radius: var(--button-radius);
+      background: var(--accent);
+      color: var(--button-text);
+      text-decoration: none;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      border: 1.5px solid var(--accent);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.58);
+      font-size: 13px;
+      font-weight: 600;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .main-button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .main-button svg {
+      width: 15px;
+      height: 15px;
+      justify-self: center;
+      fill: currentColor;
+    }
+
+    .main-button span {
+      text-align: center;
+      justify-self: center;
+    }
+
+    .copy-feedback {
+      display: none;
+      width: 100%;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      font-size: 12.5px;
+      line-height: 1.35;
+      color: var(--accent);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .copy-feedback.is-visible {
+      display: block;
+    }
+
+    /* ===== SOCIAL SECTION ===== */
+    .socials {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 26px;
+      margin-top: 26px;
+      min-height: 24px;
+      text-align: center;
+    }
+
+    .socials a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    /* ===== LOGO SECTION ===== */
+    .brand {
+      width: 100%;
+      margin-top: 0px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .brand-logo {
+      width: var(--logo-size-mobile);
+      max-width: 85vw;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ===== SAVE CONTACT SECTION ===== */
+    .save-contact-wrap {
+      width: var(--mobile-content-width);
+      max-width: 260px;
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .save-button {
+      width: 100%;
+      min-height: 46px;
+      border-radius: var(--button-radius);
+      background: var(--accent);
+      color: var(--button-text);
+      text-decoration: none;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      border: 1.5px solid var(--accent);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.58);
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .save-button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .save-button svg {
+      width: 16px;
+      height: 16px;
+      justify-self: center;
+      fill: currentColor;
+    }
+
+    .save-button span {
+      text-align: center;
+      justify-self: center;
+    }
+
+    .save-hint {
+      display: none;
+      margin: 12px 0 0;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--accent);
+      max-width: 280px;
+    }
+
+    .save-hint.is-visible {
+      display: block;
+    }
+
+    /* ===== TABLET + DESKTOP ===== */
+    @media (min-width: 768px) {
+      .page {
+        padding-top: var(--top-spacing-desktop);
+      }
+
+      .corner-lines {
+        width: 260px;
+        height: 260px;
+        opacity: 1;
+      }
+
+      .corner-lines::before,
+      .corner-lines::after,
+      .corner-lines span,
+      .corner-lines span::before,
+      .corner-lines span::after {
+        border-width: 3px;
+      }
+
+      .corner-top-right {
+        top: -108px;
+        right: -108px;
+      }
+
+      .corner-bottom-left {
+        bottom: -112px;
+        left: -112px;
+      }
+
+      .card {
+        width: min(58vw, var(--content-width));
+      }
+
+      .profile-photo {
+        width: var(--profile-size-desktop);
+        height: var(--profile-size-desktop);
+        margin-bottom: 24px;
+      }
+
+      .name {
+        font-size: 29px;
+      }
+
+      .title {
+        font-size: 16px;
+      }
+
+      .profile {
+        margin-bottom: 30px;
+      }
+
+      .links {
+        gap: 18px;
+      }
+
+      .main-button {
+        min-height: var(--desktop-button-height);
+        font-size: 15px;
+        grid-template-columns: 56px 1fr 56px;
+      }
+
+      .copy-feedback {
+        font-size: 13px;
+        margin-top: -4px;
+        margin-bottom: 0;
+      }
+
+      .socials {
+        margin-top: 28px;
+      }
+
+      .brand {
+        margin-top: 20px;
+      }
+
+      .brand-logo {
+        width: var(--logo-size-desktop);
+        max-width: 460px;
+        height: auto;
+      }
+
+      .save-contact-wrap {
+        width: 260px;
+        margin-top: 30px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .card {
+        width: min(52vw, var(--content-width));
+      }
+
+      .corner-lines {
+        width: 320px;
+        height: 320px;
+      }
+
+      .corner-top-right {
+        top: -132px;
+        right: -132px;
+      }
+
+      .corner-bottom-left {
+        bottom: -136px;
+        left: -136px;
+      }
+    }
+
+    @media (max-height: 700px) and (max-width: 767px) {
+      .page {
+        padding-top: 52px;
+      }
+
+      .profile {
+        margin-bottom: 18px;
+      }
+
+      .brand {
+        margin-top: 0px;
+      }
+
+      .save-contact-wrap {
+        margin-top: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="corner-lines corner-top-right"><span></span></div>
+  <div class="corner-lines corner-bottom-left"><span></span></div>
+
+  <main class="page">
+    <section class="card" aria-label="Digital business card">
+      <header class="profile">
+        <img class="profile-photo" src="profile.jpg" alt="Ilan Ronen" />
+        <h1 class="name">Ilan Ronen</h1>
+        <p class="title">CEO &amp; Founder</p>
+      </header>
+
+      <nav class="links" aria-label="Contact links">
+        <a class="main-button phone-button" href="tel:+972586045183" data-phone="+972 58-604-5183" data-copy-value="+972586045183" aria-label="Call Ilan Ronen">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+          </svg>
+          <span class="phone-label">phone</span>
+          <i></i>
+        </a>
+
+        <p class="copy-feedback phone-feedback">Phone number has been copied to clipboard.</p>
+
+        <a class="main-button email-button" href="mailto:ilan@horizonsmartsolutions.com" data-email="ilan@horizonsmartsolutions.com" aria-label="Email Ilan Ronen">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          <span class="email-label">Email</span>
+          <i></i>
+        </a>
+
+        <p class="copy-feedback email-feedback">Email has been copied to clipboard.</p>
+
+        <a class="main-button" href="https://wa.me/9725845183" target="_blank" rel="noopener" aria-label="Message Ilan Ronen on WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.33 4.95L2.05 22l5.26-1.38a9.87 9.87 0 0 0 4.73 1.2h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.15c-.24.68-1.39 1.3-1.95 1.38-.5.08-1.13.11-1.83-.11-.42-.13-.97-.31-1.67-.61-2.94-1.27-4.86-4.23-5.01-4.43-.15-.2-1.2-1.6-1.2-3.05s.76-2.16 1.03-2.46c.27-.3.59-.38.79-.38h.57c.18 0 .43-.07.67.51.24.58.85 2.04.92 2.19.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.18-.32.39-.45.52-.15.15-.31.31-.13.61.18.3.79 1.3 1.69 2.1 1.16 1.03 2.14 1.35 2.44 1.5.3.15.48.13.66-.08.2-.23.76-.89.96-1.19.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.23.57.35.07.13.07.73-.17 1.4z"/>
+          </svg>
+          <span>Let’s connect</span>
+          <i></i>
+        </a>
+      </nav>
+
+      <div class="socials" aria-label="Social links">
+        <a href="https://www.linkedin.com/in/ilan-r-540a55167/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+      </div>
+
+      <section class="brand" aria-label="Company logo">
+        <img class="brand-logo" src="logo.png" alt="Horizon Smart Solutions Ltd." />
+      </section>
+    </section>
+
+    <div class="save-contact-wrap">
+      <a class="save-button save-contact-button" href="ilan-ronen.vcf" download aria-label="Save Ilan Ronen contact">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/>
+        </svg>
+        <span class="save-contact-label">Save Contact</span>
+        <i></i>
+      </a>
+
+      <p class="save-hint">
+        To save this contact, open this page on your phone and tap Save Contact.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const phoneButton = document.querySelector('.phone-button');
+    const phoneLabel = document.querySelector('.phone-label');
+    const phoneFeedback = document.querySelector('.phone-feedback');
+
+    const emailButton = document.querySelector('.email-button');
+    const emailLabel = document.querySelector('.email-label');
+    const emailFeedback = document.querySelector('.email-feedback');
+
+    const saveContactButton = document.querySelector('.save-contact-button');
+    const saveContactLabel = document.querySelector('.save-contact-label');
+    const saveHint = document.querySelector('.save-hint');
+
+    function copyToClipboard(value) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(value);
+      }
+
+      const textArea = document.createElement('textarea');
+      textArea.value = value;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      textArea.style.top = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      return new Promise((resolve, reject) => {
+        try {
+          document.execCommand('copy');
+          textArea.remove();
+          resolve();
+        } catch (error) {
+          textArea.remove();
+          reject(error);
+        }
+      });
+    }
+
+    function showFeedback(feedbackElement, message) {
+      feedbackElement.textContent = message;
+      feedbackElement.classList.add('is-visible');
+    }
+
+    phoneButton.addEventListener('click', function (event) {
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+      if (isDesktop) {
+        event.preventDefault();
+
+        const visiblePhone = phoneButton.dataset.phone;
+        const copiedPhone = phoneButton.dataset.copyValue;
+
+        phoneLabel.textContent = visiblePhone;
+
+        copyToClipboard(copiedPhone)
+          .then(() => {
+            showFeedback(phoneFeedback, 'Phone number has been copied to clipboard.');
+          })
+          .catch(() => {
+            showFeedback(phoneFeedback, 'Phone number is shown above.');
+          });
+      }
+    });
+
+    emailButton.addEventListener('click', function (event) {
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+      if (isDesktop) {
+        event.preventDefault();
+
+        const email = emailButton.dataset.email;
+
+        emailLabel.textContent = email;
+
+        copyToClipboard(email)
+          .then(() => {
+            showFeedback(emailFeedback, 'Email has been copied to clipboard.');
+          })
+          .catch(() => {
+            showFeedback(emailFeedback, 'Email is shown above.');
+          });
+      }
+    });
+
+    saveContactButton.addEventListener('click', function (event) {
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+      if (isDesktop) {
+        event.preventDefault();
+        saveContactLabel.textContent = 'Open on phone';
+        saveHint.classList.add('is-visible');
+      }
+    });
+  </script>
+</body>
+</html>
