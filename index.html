@@ -52,7 +52,7 @@
       justify-content: flex-start;
       align-items: center;
       flex-direction: column;
-      padding: var(--top-spacing-mobile) 0 28px;
+      padding: var(--top-spacing-mobile) 0 42px;
       text-align: center;
     }
 
@@ -107,6 +107,65 @@
     .corner-bottom-left {
       bottom: -78px;
       left: -78px;
+    }
+
+    /* ===== SIDE SCROLL ARROWS ===== */
+    .mobile-scroll-arrows {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      display: block;
+    }
+
+    .side-arrow {
+      position: fixed;
+      top: 56vh;
+      width: 22px;
+      height: 120px;
+      opacity: 0.9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      animation: arrowFloat 1.8s ease-in-out infinite;
+    }
+
+    .side-arrow-left {
+      left: 12px;
+    }
+
+    .side-arrow-right {
+      right: 12px;
+    }
+
+    .arrow-line {
+      width: 2px;
+      height: 82px;
+      background: linear-gradient(to bottom, rgba(201, 111, 73, 0.18), rgba(201, 111, 73, 0.95));
+      border-radius: 999px;
+    }
+
+    .arrow-head {
+      width: 16px;
+      height: 16px;
+      border-right: 3px solid var(--accent);
+      border-bottom: 3px solid var(--accent);
+      transform: rotate(45deg);
+      border-radius: 1px;
+    }
+
+    @keyframes arrowFloat {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.78;
+      }
+
+      50% {
+        transform: translateY(10px);
+        opacity: 1;
+      }
     }
 
     .card {
@@ -252,10 +311,10 @@
 
     .save-contact-wrap {
       width: var(--mobile-content-width);
-      max-width: 300px;
+      max-width: 320px;
       margin-top: 24px;
       position: relative;
-      z-index: 1;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -303,9 +362,17 @@
       display: none;
       margin-top: 18px;
       width: 100%;
+      max-width: 300px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      background: #ffffff;
+      border: 1.5px solid rgba(201, 111, 73, 0.35);
+      border-radius: 22px;
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      position: relative;
+      z-index: 5;
     }
 
     .contact-qr-panel.is-visible {
@@ -317,28 +384,55 @@
       font-size: 13.5px;
       line-height: 1.4;
       color: var(--accent);
-      font-weight: 600;
+      font-weight: 700;
+      background: #ffffff;
     }
 
     .contact-qr {
       width: var(--qr-size-mobile);
-      max-width: 78vw;
+      max-width: 72vw;
       height: auto;
       display: block;
       border-radius: 14px;
+      background: #ffffff;
     }
 
     .contact-qr-note {
-      margin: 10px 0 0;
+      margin: 12px 0 0;
       font-size: 12.5px;
       line-height: 1.45;
       color: var(--accent);
-      max-width: 285px;
+      max-width: 260px;
+      background: #ffffff;
     }
 
     @media (min-width: 768px) {
       .page {
         padding-top: var(--top-spacing-desktop);
+      }
+
+      .side-arrow {
+        top: 54vh;
+        width: 28px;
+        height: 150px;
+      }
+
+      .side-arrow-left {
+        left: clamp(28px, 7vw, 120px);
+      }
+
+      .side-arrow-right {
+        right: clamp(28px, 7vw, 120px);
+      }
+
+      .arrow-line {
+        width: 2.5px;
+        height: 104px;
+      }
+
+      .arrow-head {
+        width: 19px;
+        height: 19px;
       }
 
       .corner-lines {
@@ -418,8 +512,13 @@
       }
 
       .save-contact-wrap {
-        width: 300px;
+        width: 320px;
         margin-top: 30px;
+      }
+
+      .contact-qr-panel {
+        max-width: 320px;
+        padding: 18px 18px 20px;
       }
 
       .contact-qr {
@@ -433,6 +532,7 @@
 
       .contact-qr-note {
         font-size: 13px;
+        max-width: 280px;
       }
     }
 
@@ -455,11 +555,28 @@
         bottom: -136px;
         left: -136px;
       }
+
+      .side-arrow-left {
+        left: clamp(48px, 10vw, 180px);
+      }
+
+      .side-arrow-right {
+        right: clamp(48px, 10vw, 180px);
+      }
     }
 
     @media (max-height: 700px) and (max-width: 767px) {
       .page {
         padding-top: 52px;
+      }
+
+      .side-arrow {
+        top: 58vh;
+        height: 96px;
+      }
+
+      .arrow-line {
+        height: 62px;
       }
 
       .profile {
@@ -473,6 +590,14 @@
       .save-contact-wrap {
         margin-top: 18px;
       }
+
+      .contact-qr {
+        width: 180px;
+      }
+
+      .contact-qr-note {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -480,6 +605,18 @@
 <body>
   <div class="corner-lines corner-top-right"><span></span></div>
   <div class="corner-lines corner-bottom-left"><span></span></div>
+
+  <div class="mobile-scroll-arrows" aria-hidden="true">
+    <div class="side-arrow side-arrow-left">
+      <span class="arrow-line"></span>
+      <span class="arrow-head"></span>
+    </div>
+
+    <div class="side-arrow side-arrow-right">
+      <span class="arrow-line"></span>
+      <span class="arrow-head"></span>
+    </div>
+  </div>
 
   <main class="page">
     <section class="card" aria-label="Digital business card">
@@ -529,7 +666,7 @@
     </section>
 
     <div class="save-contact-wrap">
-      <button class="save-button save-contact-button" type="button" aria-label="Show contact QR code">
+      <button class="save-button save-contact-button" type="button" aria-label="Save contact">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/>
         </svg>
@@ -541,7 +678,7 @@
         <p class="contact-qr-title">Scan to add contact</p>
         <img class="contact-qr" src="contact-qr.png" alt="QR code to add Ilan Ronen as a contact" />
         <p class="contact-qr-note">
-          On desktop, scan with your phone. On mobile, screenshot or long-press the QR and open it with your gallery or Google Lens.
+          On desktop, scan with your phone. On mobile, use this QR as backup if the native contact screen does not open.
         </p>
       </div>
     </div>
@@ -561,6 +698,17 @@
     const contactQrPanel = document.querySelector('.contact-qr-panel');
 
     const linkedinLink = document.querySelector('.linkedin-link');
+
+    const androidContactIntent =
+      'intent://contacts/people/#Intent;' +
+      'action=android.intent.action.INSERT;' +
+      'type=vnd.android.cursor.dir/contact;' +
+      'S.name=Ilan%20Ronen;' +
+      'S.phone=%2B972586045183;' +
+      'S.email=ilan%40horizonsmartsolutions.com;' +
+      'S.company=Horizon%20Smart%20Solutions%20Ltd.;' +
+      'S.job_title=CEO%20%26%20Founder;' +
+      'end';
 
     function copyToClipboard(value) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -591,6 +739,24 @@
     function showFeedback(feedbackElement, message) {
       feedbackElement.textContent = message;
       feedbackElement.classList.add('is-visible');
+    }
+
+    function showContactQr() {
+      contactQrPanel.classList.add('is-visible');
+      saveContactLabel.textContent = 'Hide Contact QR';
+    }
+
+    function hideContactQr() {
+      contactQrPanel.classList.remove('is-visible');
+      saveContactLabel.textContent = 'Save Contact';
+    }
+
+    function toggleContactQr() {
+      if (contactQrPanel.classList.contains('is-visible')) {
+        hideContactQr();
+      } else {
+        showContactQr();
+      }
     }
 
     phoneButton.addEventListener('click', function (event) {
@@ -635,8 +801,25 @@
     });
 
     saveContactButton.addEventListener('click', function () {
-      const isVisible = contactQrPanel.classList.toggle('is-visible');
-      saveContactLabel.textContent = isVisible ? 'Hide Contact QR' : 'Save Contact';
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const isAndroid = /Android/i.test(navigator.userAgent);
+
+      if (isDesktop) {
+        toggleContactQr();
+        return;
+      }
+
+      if (isAndroid) {
+        window.location.href = androidContactIntent;
+
+        setTimeout(function () {
+          showContactQr();
+        }, 1200);
+
+        return;
+      }
+
+      toggleContactQr();
     });
 
     linkedinLink.addEventListener('click', function (event) {
