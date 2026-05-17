@@ -476,7 +476,7 @@
 
     .qr-mobile-options {
       display: grid;
-      gap: 8px;
+      gap: 9px;
       width: 100%;
     }
 
@@ -643,13 +643,13 @@
         margin-top: 0;
       }
 
+      .contact-qr-title {
+        display: none;
+      }
+
       .contact-qr {
         width: var(--qr-size-desktop);
         max-width: 260px;
-      }
-
-      .contact-qr-title {
-        font-size: 14px;
       }
 
       .contact-qr-note {
@@ -810,14 +810,21 @@
         </div>
 
         <div class="contact-qr-panel" aria-label="Contact QR code">
-          <p class="contact-qr-title">Scan to add contact</p>
+          <p class="contact-qr-title">QR Code</p>
           <img class="contact-qr" src="contact-qr.png" alt="QR code to add Ilan Ronen as a contact" />
+
           <p class="contact-qr-note">
-            <span class="desktop-only-text">Scan this QR with your phone to add the contact.</span>
+            <span class="desktop-only-text">Scan this QR with your phone to save the contact.</span>
+
             <span class="mobile-only-text">
               <span class="qr-mobile-options">
-                <span class="qr-mobile-option"><strong>Option 1:</strong> Screenshot the QR, open the screenshot in your Gallery, then hold/tap the center of the QR and open the link/action that appears.</span>
-                <span class="qr-mobile-option"><strong>Option 2:</strong> Hold the center of the QR image on this page, choose “Search with Google Lens,” then look near the bottom-right and select “Add to contact” or “Save contact” if it appears.</span>
+                <span class="qr-mobile-option">
+                  <strong>Option 1:</strong> Take a screenshot, open it in your Gallery, hold the middle of the QR, and select the output/link that appears.
+                </span>
+
+                <span class="qr-mobile-option">
+                  <strong>Option 2:</strong> Hold the middle of the QR directly on this website, select “Search with Google Lens,” then select “Add contact” in the bottom-right of the window.
+                </span>
               </span>
             </span>
           </p>
