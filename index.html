@@ -109,7 +109,6 @@
       left: -78px;
     }
 
-    /* ===== SIDE SCROLL ARROWS ===== */
     .mobile-scroll-arrows {
       position: fixed;
       inset: 0;
@@ -457,8 +456,7 @@
       background: #ffffff;
     }
 
-    .contact-qr-note,
-    .download-note {
+    .contact-qr-note {
       margin: 12px 0 0;
       font-size: 12.5px;
       line-height: 1.45;
@@ -467,8 +465,22 @@
       background: #ffffff;
     }
 
+    .download-note {
+      margin: 12px 0 0;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #d93025;
+      max-width: 270px;
+      background: #ffffff;
+      font-weight: 800;
+    }
+
     .desktop-only-text {
       display: none;
+    }
+
+    .mobile-only-text {
+      display: inline;
     }
 
     @media (min-width: 768px) {
@@ -593,6 +605,10 @@
 
       .desktop-only-text {
         display: block;
+      }
+
+      .mobile-only-text {
+        display: none;
       }
 
       .contact-qr-panel {
@@ -774,7 +790,7 @@
         <div class="download-panel" aria-label="Download contact file">
           <p class="download-title">Contact file downloaded</p>
           <p class="download-note">
-            Open the downloaded <strong>ilan-ronen.vcf</strong> file to import the contact into your phone.
+            Important: after downloading, open the <strong>ilan-ronen.vcf</strong> file to import the contact into your phone.
           </p>
         </div>
       </div>
