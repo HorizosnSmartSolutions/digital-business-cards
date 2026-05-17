@@ -469,8 +469,19 @@
       font-size: 12.5px;
       line-height: 1.45;
       color: var(--accent);
-      max-width: 270px;
+      max-width: 280px;
       background: #ffffff;
+      text-align: left;
+    }
+
+    .qr-mobile-options {
+      display: grid;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .qr-mobile-option {
+      display: block;
     }
 
     .download-note {
@@ -644,6 +655,7 @@
       .contact-qr-note {
         font-size: 13px;
         max-width: 280px;
+        text-align: center;
       }
     }
 
@@ -802,7 +814,12 @@
           <img class="contact-qr" src="contact-qr.png" alt="QR code to add Ilan Ronen as a contact" />
           <p class="contact-qr-note">
             <span class="desktop-only-text">Scan this QR with your phone to add the contact.</span>
-            <span class="mobile-only-text">Screenshot the QR, open it in your Gallery, then use Google Lens. If available, choose “Add to contact.” You can also long-press the QR and search it with Google Lens.</span>
+            <span class="mobile-only-text">
+              <span class="qr-mobile-options">
+                <span class="qr-mobile-option"><strong>Option 1:</strong> Screenshot the QR, open the screenshot in your Gallery, then hold/tap the center of the QR and open the link/action that appears.</span>
+                <span class="qr-mobile-option"><strong>Option 2:</strong> Hold the center of the QR image on this page, choose “Search with Google Lens,” then look near the bottom-right and select “Add to contact” or “Save contact” if it appears.</span>
+              </span>
+            </span>
           </p>
         </div>
 
